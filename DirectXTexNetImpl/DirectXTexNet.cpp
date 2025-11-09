@@ -153,11 +153,26 @@ namespace DirectXTexNet
 		Marshal::ThrowExceptionForHR(hr);
 		return ToManaged(native);
 	}
+	TexMetadata^ TexHelperImpl::GetMetadataFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags)
+	{
+		DirectX::TexMetadata native;
+		auto hr = DirectX::GetMetadataFromTGAMemory(pSource.ToPointer(), static_cast<size_t>(size), static_cast<DirectX::TGA_FLAGS>(flags), native);
+		Marshal::ThrowExceptionForHR(hr);
+		return ToManaged(native);
+	}
 	TexMetadata^ TexHelperImpl::GetMetadataFromTGAFile(String^ szFile)
 	{
 		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(szFile);
 		DirectX::TexMetadata native;
 		auto hr = DirectX::GetMetadataFromTGAFile(filenameCStr, native);
+		Marshal::ThrowExceptionForHR(hr);
+		return ToManaged(native);
+	}
+	TexMetadata^ TexHelperImpl::GetMetadataFromTGAFile(String^ szFile, TGA_FLAGS flags)
+	{
+		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(szFile);
+		DirectX::TexMetadata native;
+		auto hr = DirectX::GetMetadataFromTGAFile(filenameCStr, static_cast<DirectX::TGA_FLAGS>(flags), native);
 		Marshal::ThrowExceptionForHR(hr);
 		return ToManaged(native);
 	}
@@ -560,6 +575,23 @@ namespace DirectXTexNet
 			throw;
 		}
 	}
+	ScratchImage^ TexHelperImpl::LoadFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags)
+	{
+		auto image = gcnew ActualScratchImageImpl();
+		try
+		{
+			auto hr = DirectX::LoadFromTGAMemory(pSource.ToPointer(), static_cast<size_t>(size), static_cast<DirectX::TGA_FLAGS>(flags), nullptr, *image->scratchImage_);
+
+			Marshal::ThrowExceptionForHR(hr);
+
+			return image;
+		}
+		catch (Exception^)
+		{
+			delete image;
+			throw;
+		}
+	}
 	ScratchImage^ TexHelperImpl::LoadFromTGAFile(String^ filename)
 	{
 		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(filename);
@@ -568,6 +600,25 @@ namespace DirectXTexNet
 		try
 		{
 			auto hr = DirectX::LoadFromTGAFile(filenameCStr, nullptr, *image->scratchImage_);
+
+			Marshal::ThrowExceptionForHR(hr);
+
+			return image;
+		}
+		catch (Exception^)
+		{
+			delete image;
+			throw;
+		}
+	}
+	ScratchImage^ TexHelperImpl::LoadFromTGAFile(String^ filename, TGA_FLAGS flags)
+	{
+		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(filename);
+
+		auto image = gcnew ActualScratchImageImpl();
+		try
+		{
+			auto hr = DirectX::LoadFromTGAFile(filenameCStr, static_cast<DirectX::TGA_FLAGS>(flags), nullptr, *image->scratchImage_);
 
 			Marshal::ThrowExceptionForHR(hr);
 
@@ -596,11 +647,36 @@ namespace DirectXTexNet
 			throw;
 		}
 	}
+	UnmanagedMemoryStream^ ScratchImageImpl::SaveToTGAMemory(Size_t imageIndex, TGA_FLAGS flags)
+	{
+		DirectX::Blob* blob = new DirectX::Blob();
+		try
+		{
+			auto hr = DirectX::SaveToTGAMemory(*GetImageInternal(imageIndex), static_cast<DirectX::TGA_FLAGS>(flags), *blob);
+
+			Marshal::ThrowExceptionForHR(hr);
+
+			return gcnew BlobImpl(blob);
+		}
+		catch (Exception^)
+		{
+			delete blob;
+			throw;
+		}
+	}
 	void ScratchImageImpl::SaveToTGAFile(Size_t imageIndex, String^ szFile)
 	{
 		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(szFile);
 
 		auto hr = DirectX::SaveToTGAFile(*GetImageInternal(imageIndex), filenameCStr);
+
+		Marshal::ThrowExceptionForHR(hr);
+	}
+	void ScratchImageImpl::SaveToTGAFile(Size_t imageIndex, String^ szFile, TGA_FLAGS flags)
+	{
+		pin_ptr<const wchar_t> filenameCStr = PtrToStringChars(szFile);
+
+		auto hr = DirectX::SaveToTGAFile(*GetImageInternal(imageIndex), static_cast<DirectX::TGA_FLAGS>(flags), filenameCStr);
 
 		Marshal::ThrowExceptionForHR(hr);
 	}

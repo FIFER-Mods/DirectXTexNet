@@ -174,7 +174,11 @@ namespace DirectXTexNet
 
 		UnmanagedMemoryStream^ SaveToTGAMemory(Size_t imageIndex) override;
 
+		UnmanagedMemoryStream^ SaveToTGAMemory(Size_t imageIndex, TGA_FLAGS flags) override;
+
 		void SaveToTGAFile(Size_t imageIndex, String^ szFile) override;
+
+		void SaveToTGAFile(Size_t imageIndex, String^ szFile, TGA_FLAGS flags) override;
 
 		UnmanagedMemoryStream^ SaveToWICMemory(Size_t imageIndex, WIC_FLAGS flags, Guid guidContainerFormat) override;
 
@@ -568,7 +572,11 @@ namespace DirectXTexNet
 
 		TexMetadata^ GetMetadataFromTGAMemory(IntPtr pSource, Size_T size) override;
 
+		TexMetadata^ GetMetadataFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags) override;
+
 		TexMetadata^ GetMetadataFromTGAFile(String^ szFile) override;
+
+		TexMetadata^ GetMetadataFromTGAFile(String^ szFile, TGA_FLAGS flags) override;
 
 		TexMetadata^ GetMetadataFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags) override;
 
@@ -600,7 +608,11 @@ namespace DirectXTexNet
 
 		ScratchImage^ LoadFromTGAMemory(IntPtr pSource, Size_T size) override;
 
+		ScratchImage^ LoadFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags) override;
+
 		ScratchImage^ LoadFromTGAFile(String^ filename) override;
+
+		ScratchImage^ LoadFromTGAFile(String^ filename, TGA_FLAGS flags) override;
 
 		ScratchImage^ LoadFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags) override;
 

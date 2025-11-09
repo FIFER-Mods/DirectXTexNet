@@ -770,6 +770,42 @@ namespace DirectXTexNet
         FORCE_SRGB = 0x1,
         IGNORE_SRGB = 0x2,
     }
+
+    [Flags]
+    public enum TGA_FLAGS
+    {
+        NONE = 0x0,
+
+        /// <summary>
+        /// 24bpp files are returned as BGRX; 32bpp files are returned as BGRA
+        /// </summary>
+        BGR = 0x1,
+
+        /// <summary>
+        /// If the loaded image has an all zero alpha channel, normally it is assumed to be opaque. This flag leaves it as all zero alpha.
+        /// </summary>
+        ALLOW_ALL_ZERO_ALPHA = 0x2,
+
+        /// <summary>
+        /// Ignores sRGB TGA 2.0 metadata if present in the file
+        /// </summary>
+        IGNORE_SRGB = 0x10,
+
+        /// <summary>
+        /// Writes sRGB metadata into the file reguardless of format (TGA 2.0 only)
+        /// </summary>
+        FORCE_SRGB = 0x20,
+
+        /// <summary>
+        /// Writes linear gamma metadata into the file reguardless of format (TGA 2.0 only)
+        /// </summary>
+        FORCE_LINEAR = 0x40,
+
+        /// <summary>
+        /// If no colorspace is specified in TGA 2.0 metadata, assume sRGB
+        /// </summary>
+        DEFAULT_SRGB = 0x80,
+    }
     #endregion
 
     #region Delegates
@@ -997,7 +1033,11 @@ namespace DirectXTexNet
 
         public abstract UnmanagedMemoryStream SaveToTGAMemory(Size_t imageIndex);
 
+        public abstract UnmanagedMemoryStream SaveToTGAMemory(Size_t imageIndex, TGA_FLAGS flags);
+
         public abstract void SaveToTGAFile(Size_t imageIndex, String szFile);
+
+        public abstract void SaveToTGAFile(Size_t imageIndex, String szFile, TGA_FLAGS flags);
 
         public abstract void SaveToDDSFile(Size_t imageIndex, DDS_FLAGS flags, String szFile);
 
@@ -1343,7 +1383,11 @@ namespace DirectXTexNet
 
         public abstract TexMetadata GetMetadataFromTGAMemory(IntPtr pSource, Size_T size);
 
+        public abstract TexMetadata GetMetadataFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags);
+
         public abstract TexMetadata GetMetadataFromTGAFile(String szFile);
+
+        public abstract TexMetadata GetMetadataFromTGAFile(String szFile, TGA_FLAGS flags);
 
         public abstract TexMetadata GetMetadataFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags);
 
@@ -1397,7 +1441,11 @@ namespace DirectXTexNet
         // TGA operations
         public abstract ScratchImage LoadFromTGAMemory(IntPtr pSource, Size_T size);
 
+        public abstract ScratchImage LoadFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags);
+
         public abstract ScratchImage LoadFromTGAFile(String szFile);
+
+        public abstract ScratchImage LoadFromTGAFile(String szFile, TGA_FLAGS flags);
 
         // WIC operations
         public abstract ScratchImage LoadFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags);
