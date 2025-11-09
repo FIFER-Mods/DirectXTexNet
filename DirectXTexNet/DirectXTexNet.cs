@@ -9,12 +9,12 @@ using Size_t = System.Int32;
 using Size_T = System.Int64;
 
 // just some aliases for better readability 
-using IWICImagingFactoryPtr = System.IntPtr;
-using ID3D11DevicePtr = System.IntPtr;
-using ID3D11ResourcePtr = System.IntPtr;
-using ID3D11ShaderResourceViewPtr = System.IntPtr;
-using ID3D11DeviceContextPtr = System.IntPtr;
-using XMVectorPtr = System.IntPtr;
+using IWICImagingFactoryPtr = nint;
+using ID3D11DevicePtr = nint;
+using ID3D11ResourcePtr = nint;
+using ID3D11ShaderResourceViewPtr = nint;
+using ID3D11DeviceContextPtr = nint;
+using XMVectorPtr = nint;
 using System.Runtime.Loader;
 using System.Runtime.CompilerServices;
 
@@ -826,7 +826,7 @@ namespace DirectXTexNet
     /// <param name="width">The width.</param>
     /// <param name="y">The y/row index.</param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void EvaluatePixelsDelegate(XMVectorPtr pixels, IntPtr width, IntPtr y);
+    public delegate void EvaluatePixelsDelegate(XMVectorPtr pixels, nint width, nint y);
 
     /// <summary>
     /// The delegate used for the EvaluateImage method.
@@ -839,7 +839,7 @@ namespace DirectXTexNet
     /// <param name="width">The width.</param>
     /// <param name="y">The y/row index.</param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TransformPixelsDelegate(XMVectorPtr outPixels, XMVectorPtr inPixels, IntPtr width, IntPtr y);
+    public delegate void TransformPixelsDelegate(XMVectorPtr outPixels, XMVectorPtr inPixels, nint width, nint y);
     #endregion
 
     #region structs
@@ -880,11 +880,11 @@ namespace DirectXTexNet
 
         public Size_T SlicePitch { get; }
 
-        public IntPtr Pixels { get; }
+        public nint Pixels { get; }
 
         public object Parent { get; }
 
-        public Image(Size_t width, Size_t height, DXGI_FORMAT format, Size_T rowPitch, Size_T slicePitch, IntPtr pixels, object parent)
+        public Image(Size_t width, Size_t height, DXGI_FORMAT format, Size_T rowPitch, Size_T slicePitch, nint pixels, object parent)
         {
             this.Width = width;
             this.Height = height;
@@ -1001,7 +1001,7 @@ namespace DirectXTexNet
         /// <summary>
         /// Normally GetImage().pixels should be used instead, because this only returns a pointer to the pixel data if this image owns the pixel data.
         /// </summary>
-        public abstract IntPtr GetPixels();
+        public abstract nint GetPixels();
 
         /// <summary>
         /// This only returns a value if this image owns the pixel data.
@@ -1403,23 +1403,23 @@ namespace DirectXTexNet
         #endregion
 
         #region Texture metadata
-        public abstract TexMetadata GetMetadataFromDDSMemory(IntPtr pSource, Size_T size, DDS_FLAGS flags);
+        public abstract TexMetadata GetMetadataFromDDSMemory(nint pSource, Size_T size, DDS_FLAGS flags);
 
         public abstract TexMetadata GetMetadataFromDDSFile(String szFile, DDS_FLAGS flags);
 
-        public abstract TexMetadata GetMetadataFromHDRMemory(IntPtr pSource, Size_T size);
+        public abstract TexMetadata GetMetadataFromHDRMemory(nint pSource, Size_T size);
 
         public abstract TexMetadata GetMetadataFromHDRFile(String szFile);
 
-        public abstract TexMetadata GetMetadataFromTGAMemory(IntPtr pSource, Size_T size);
+        public abstract TexMetadata GetMetadataFromTGAMemory(nint pSource, Size_T size);
 
-        public abstract TexMetadata GetMetadataFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags);
+        public abstract TexMetadata GetMetadataFromTGAMemory(nint pSource, Size_T size, TGA_FLAGS flags);
 
         public abstract TexMetadata GetMetadataFromTGAFile(String szFile);
 
         public abstract TexMetadata GetMetadataFromTGAFile(String szFile, TGA_FLAGS flags);
 
-        public abstract TexMetadata GetMetadataFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags);
+        public abstract TexMetadata GetMetadataFromWICMemory(nint pSource, Size_T size, WIC_FLAGS flags);
 
         public abstract TexMetadata GetMetadataFromWICFile(String szFile, WIC_FLAGS flags);
         #endregion
@@ -1459,26 +1459,26 @@ namespace DirectXTexNet
 
         #region Image I/O
         // DDS operations
-        public abstract ScratchImage LoadFromDDSMemory(IntPtr pSource, Size_T size, DDS_FLAGS flags);
+        public abstract ScratchImage LoadFromDDSMemory(nint pSource, Size_T size, DDS_FLAGS flags);
 
         public abstract ScratchImage LoadFromDDSFile(String szFile, DDS_FLAGS flags);
 
         // HDR operations
-        public abstract ScratchImage LoadFromHDRMemory(IntPtr pSource, Size_T size);
+        public abstract ScratchImage LoadFromHDRMemory(nint pSource, Size_T size);
 
         public abstract ScratchImage LoadFromHDRFile(String szFile);
 
         // TGA operations
-        public abstract ScratchImage LoadFromTGAMemory(IntPtr pSource, Size_T size);
+        public abstract ScratchImage LoadFromTGAMemory(nint pSource, Size_T size);
 
-        public abstract ScratchImage LoadFromTGAMemory(IntPtr pSource, Size_T size, TGA_FLAGS flags);
+        public abstract ScratchImage LoadFromTGAMemory(nint pSource, Size_T size, TGA_FLAGS flags);
 
         public abstract ScratchImage LoadFromTGAFile(String szFile);
 
         public abstract ScratchImage LoadFromTGAFile(String szFile, TGA_FLAGS flags);
 
         // WIC operations
-        public abstract ScratchImage LoadFromWICMemory(IntPtr pSource, Size_T size, WIC_FLAGS flags);
+        public abstract ScratchImage LoadFromWICMemory(nint pSource, Size_T size, WIC_FLAGS flags);
 
         public abstract ScratchImage LoadFromWICFile(String szFile, WIC_FLAGS flags);
         #endregion
