@@ -1481,6 +1481,122 @@ namespace DirectXTexNet
         public abstract ScratchImage LoadFromWICMemory(nint pSource, Size_T size, WIC_FLAGS flags);
 
         public abstract ScratchImage LoadFromWICFile(String szFile, WIC_FLAGS flags);
+
+#if NET6_0_OR_GREATER
+        // Modern Span<T> overloads for zero-copy, safer memory operations
+        
+        /// <summary>
+        /// Loads a DDS texture from a span of bytes (zero-copy operation).
+        /// </summary>
+        public ScratchImage LoadFromDDSMemory(ReadOnlySpan<byte> source, DDS_FLAGS flags = DDS_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return LoadFromDDSMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads an HDR texture from a span of bytes (zero-copy operation).
+        /// </summary>
+        public ScratchImage LoadFromHDRMemory(ReadOnlySpan<byte> source)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return LoadFromHDRMemory((nint)ptr, source.Length);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads a TGA texture from a span of bytes (zero-copy operation).
+        /// </summary>
+        public ScratchImage LoadFromTGAMemory(ReadOnlySpan<byte> source, TGA_FLAGS flags = TGA_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return LoadFromTGAMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads a WIC-supported texture from a span of bytes (zero-copy operation).
+        /// </summary>
+        public ScratchImage LoadFromWICMemory(ReadOnlySpan<byte> source, WIC_FLAGS flags = WIC_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return LoadFromWICMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets metadata from a DDS texture in a span of bytes (zero-copy operation).
+        /// </summary>
+        public TexMetadata GetMetadataFromDDSMemory(ReadOnlySpan<byte> source, DDS_FLAGS flags = DDS_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return GetMetadataFromDDSMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets metadata from an HDR texture in a span of bytes (zero-copy operation).
+        /// </summary>
+        public TexMetadata GetMetadataFromHDRMemory(ReadOnlySpan<byte> source)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return GetMetadataFromHDRMemory((nint)ptr, source.Length);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets metadata from a TGA texture in a span of bytes (zero-copy operation).
+        /// </summary>
+        public TexMetadata GetMetadataFromTGAMemory(ReadOnlySpan<byte> source, TGA_FLAGS flags = TGA_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return GetMetadataFromTGAMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets metadata from a WIC-supported texture in a span of bytes (zero-copy operation).
+        /// </summary>
+        public TexMetadata GetMetadataFromWICMemory(ReadOnlySpan<byte> source, WIC_FLAGS flags = WIC_FLAGS.NONE)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = source)
+                {
+                    return GetMetadataFromWICMemory((nint)ptr, source.Length, flags);
+                }
+            }
+        }
+#endif
         #endregion
 
         #region Misc image operations
