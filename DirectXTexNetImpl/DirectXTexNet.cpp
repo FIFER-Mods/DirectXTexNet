@@ -43,6 +43,10 @@ namespace DirectXTexNet
 	{
 		return DirectX::IsPlanar(static_cast<::DXGI_FORMAT>(fmt));
 	}
+	bool TexHelperImpl::IsPlanar(DXGI_FORMAT fmt, bool isD3D12)
+	{
+		return DirectX::IsPlanar(static_cast<::DXGI_FORMAT>(fmt), isD3D12);
+	}
 	bool TexHelperImpl::IsPalettized(DXGI_FORMAT fmt)
 	{
 		return DirectX::IsPalettized(static_cast<::DXGI_FORMAT>(fmt));
@@ -74,6 +78,10 @@ namespace DirectXTexNet
 	Size_t TexHelperImpl::BitsPerColor(DXGI_FORMAT fmt)
 	{
 		return static_cast<Size_t>(DirectX::BitsPerColor(static_cast<::DXGI_FORMAT>(fmt)));
+	}
+	Size_t TexHelperImpl::BytesPerBlock(DXGI_FORMAT fmt)
+	{
+		return static_cast<Size_t>(DirectX::BytesPerBlock(static_cast<::DXGI_FORMAT>(fmt)));
 	}
 	void TexHelperImpl::ComputePitch(DXGI_FORMAT fmt, Size_t width, Size_t height, Size_T% rowPitch, Size_T% slicePitch, CP_FLAGS flags)
 	{
@@ -112,6 +120,16 @@ namespace DirectXTexNet
 	DXGI_FORMAT TexHelperImpl::MakeTypelessFLOAT(DXGI_FORMAT fmt)
 	{
 		return static_cast<DXGI_FORMAT>(DirectX::MakeTypelessFLOAT(static_cast<::DXGI_FORMAT>(fmt)));
+	}
+	void TexHelperImpl::ComputeTileShape(DXGI_FORMAT fmt, TEX_DIMENSION dimension, TileShape% tileShape)
+	{
+		DirectX::TileShape nativeTileShape;
+		auto hr = DirectX::ComputeTileShape(static_cast<::DXGI_FORMAT>(fmt), static_cast<DirectX::TEX_DIMENSION>(dimension), nativeTileShape);
+		Marshal::ThrowExceptionForHR(hr);
+		
+		tileShape.Width = static_cast<Size_t>(nativeTileShape.width);
+		tileShape.Height = static_cast<Size_t>(nativeTileShape.height);
+		tileShape.Depth = static_cast<Size_t>(nativeTileShape.depth);
 	}
 
 	//---------------------------------------------------------------------------------

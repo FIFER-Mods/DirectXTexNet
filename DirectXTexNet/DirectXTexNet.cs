@@ -331,6 +331,11 @@ namespace DirectXTexNet
         PERMISSIVE = 0x80,
 
         /// <summary>
+        /// Allow some files to be read that have incorrect mipcount values in the header by only reading the top-level mip
+        /// </summary>
+        IGNORE_MIPS = 0x100,
+
+        /// <summary>
         /// Always use the 'DX10' header extension for DDS writer (i.e. don't try to write DX9 compatible DDS files)
         /// </summary>
         FORCE_DX10_EXT = 0x10000,
@@ -348,7 +353,12 @@ namespace DirectXTexNet
         /// <summary>
         /// Force use of 'RXGB' instead of 'DXT5' for DDS write of BC3_UNORM data
         /// </summary>
-        ORCE_DXT5_RXGB = 0x80000,
+        FORCE_DXT5_RXGB = 0x80000,
+
+        /// <summary>
+        /// Force use of 'RGB' 24bpp legacy Direct3D 9 format for DDS write of B8G8R8X8_UNORM data
+        /// </summary>
+        FORCE_24BPP_RGB = 0x100000,
 
         /// <summary>
         /// Enables the loader to read large dimension .dds files (i.e. greater than known hardware requirements)
@@ -837,6 +847,20 @@ namespace DirectXTexNet
     {
         public float V0, V1, V2, V3;
     }
+
+    public struct TileShape
+    {
+        public Size_t Width;
+        public Size_t Height;
+        public Size_t Depth;
+
+        public TileShape(Size_t width, Size_t height, Size_t depth)
+        {
+            Width = width;
+            Height = height;
+            Depth = depth;
+        }
+    }
     #endregion
 
     /// <summary>
@@ -1322,6 +1346,8 @@ namespace DirectXTexNet
 
         public abstract bool IsPlanar(DXGI_FORMAT fmt);
 
+        public abstract bool IsPlanar(DXGI_FORMAT fmt, bool isD3D12);
+
         public abstract bool IsPalettized(DXGI_FORMAT fmt);
 
         public abstract bool IsDepthStencil(DXGI_FORMAT fmt);
@@ -1337,6 +1363,8 @@ namespace DirectXTexNet
         public abstract Size_t BitsPerPixel(DXGI_FORMAT fmt);
 
         public abstract Size_t BitsPerColor(DXGI_FORMAT fmt);
+
+        public abstract Size_t BytesPerBlock(DXGI_FORMAT fmt);
 
         public abstract void ComputePitch(
             DXGI_FORMAT fmt,
@@ -1370,6 +1398,8 @@ namespace DirectXTexNet
         public abstract DXGI_FORMAT MakeTypelessUNORM(DXGI_FORMAT fmt);
 
         public abstract DXGI_FORMAT MakeTypelessFLOAT(DXGI_FORMAT fmt);
+
+        public abstract void ComputeTileShape(DXGI_FORMAT fmt, TEX_DIMENSION dimension, out TileShape tileShape);
         #endregion
 
         #region Texture metadata

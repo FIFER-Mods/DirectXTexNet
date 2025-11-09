@@ -527,6 +527,8 @@ namespace DirectXTexNet
 
 		bool  IsPlanar(DXGI_FORMAT fmt)override;
 
+		bool  IsPlanar(DXGI_FORMAT fmt, bool isD3D12)override;
+
 		bool  IsPalettized(DXGI_FORMAT fmt) override;
 
 		bool  IsDepthStencil(DXGI_FORMAT fmt)override;
@@ -542,6 +544,8 @@ namespace DirectXTexNet
 		Size_t BitsPerPixel(DXGI_FORMAT fmt) override;
 
 		Size_t BitsPerColor(DXGI_FORMAT fmt) override;
+
+		Size_t BytesPerBlock(DXGI_FORMAT fmt) override;
 
 		void ComputePitch(DXGI_FORMAT fmt, Size_t width, Size_t height,
 			[Out] Size_T% rowPitch, [Out] Size_T% slicePitch, CP_FLAGS flags) override;
@@ -559,6 +563,8 @@ namespace DirectXTexNet
 		DXGI_FORMAT MakeTypelessUNORM(DXGI_FORMAT fmt) override;
 
 		DXGI_FORMAT MakeTypelessFLOAT(DXGI_FORMAT fmt) override;
+
+		void ComputeTileShape(DXGI_FORMAT fmt, TEX_DIMENSION dimension, [Out] TileShape% tileShape) override;
 
 
 		// Get Texture metadata
