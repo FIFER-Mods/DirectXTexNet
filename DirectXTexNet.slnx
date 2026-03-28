@@ -1,0 +1,26 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Profile" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="DirectXTex/DirectXTex/DirectXTex_Desktop_2022.vcxproj" />
+  <Project Path="DirectXTexNet.Test/DirectXTexNet.Test.csproj">
+    <BuildDependency Project="DirectXTexNetImpl/DirectXTexNetImpl.vcxproj" />
+    <BuildType Solution="Profile|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="DirectXTexNet/DirectXTexNet.csproj">
+    <BuildType Solution="Profile|*" Project="Release" />
+  </Project>
+  <Project Path="DirectXTexNetImpl/DirectXTexNetImpl.vcxproj">
+    <BuildType Solution="Profile|*" Project="Release" />
+  </Project>
+</Solution>
