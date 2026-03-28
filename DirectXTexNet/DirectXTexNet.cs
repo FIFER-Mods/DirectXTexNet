@@ -1258,21 +1258,22 @@ namespace DirectXTexNet
 
     public abstract class TexHelper
     {
-        private static TexHelper instance;
+        private static volatile TexHelper instance;
 
         public static TexHelper Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    LoadInstance();
-                }
-                return instance;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => instance ?? EnsureInstance();
         }
 
-        private static object lockObject = new object();
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static TexHelper EnsureInstance()
+        {
+            LoadInstance();
+            return instance;
+        }
+
+        private static readonly object lockObject = new object();
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void LoadInstance()
@@ -1282,33 +1283,18 @@ namespace DirectXTexNet
                 if (instance == null)
                 {
                     string folder = AppContext.BaseDirectory;
-                    string fileName = "DirectXTexNetImpl.dll";
                     string platform = Environment.Is64BitProcess ? "x64" : "x86";
+                    string[] probePaths =
+                    [
+                        Path.Combine(folder, "DirectXTexNetImpl.dll"),
+                        Path.Combine(folder, platform, "DirectXTexNetImpl.dll"),
+                        Path.Combine(folder, "runtimes", $"win-{platform}", "native", "DirectXTexNetImpl.dll")
+                    ];
 
-                    string foundFilePath = null;
+                    string foundFilePath = Array.Find(probePaths, File.Exists)
+                        ?? throw new FileNotFoundException("DirectXTexNetImpl.dll could not be located.");
 
-                    foreach (var filePath in new[]
-                                     {
-                                         Path.Combine(folder, fileName),
-                                         Path.Combine(folder, platform, fileName),
-                                         Path.Combine(folder, "runtimes", "win-" + platform, "native", fileName)
-                                     })
-                    {
-                        if (File.Exists(filePath))
-                        {
-                            foundFilePath = filePath;
-
-                        }
-                    }
-
-                    if (foundFilePath != null)
-                    {
-                        instance = loadInstanceFrom(foundFilePath);
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException($"The {fileName} could not be located.");
-                    }
+                    instance = loadInstanceFrom(foundFilePath);
                 }
             }
         }
