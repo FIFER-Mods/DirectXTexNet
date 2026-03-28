@@ -21,4 +21,10 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>DirectXTexNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+  <!-- Include native C++/CLI DLLs alongside the managed assembly -->
+  <ItemGroup>
+    <None Include="..\bin\$(Configuration)\$(TargetFramework)-windows\DirectXTexNetImpl.dll" Pack="true" PackagePath="lib/$(TargetFramework)/" />
+    <None Include="..\bin\$(Configuration)\$(TargetFramework)-windows\Ijwhost.dll" Pack="true" PackagePath="lib/$(TargetFramework)/" />
+  </ItemGroup>
 </Project>
