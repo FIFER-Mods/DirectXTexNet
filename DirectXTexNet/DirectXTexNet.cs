@@ -1282,30 +1282,11 @@ namespace DirectXTexNet
             {
                 if (instance == null)
                 {
-                    string folder = AppContext.BaseDirectory;
-                    string platform = Environment.Is64BitProcess ? "x64" : "x86";
-                    string[] probePaths =
-                    [
-                        Path.Combine(folder, "DirectXTexNetImpl.dll"),
-                        Path.Combine(folder, platform, "DirectXTexNetImpl.dll"),
-                        Path.Combine(folder, "runtimes", $"win-{platform}", "native", "DirectXTexNetImpl.dll")
-                    ];
+                    string filePath = Path.Combine(AppContext.BaseDirectory, "DirectXTexNetImpl.dll");
 
-                    string foundFilePath = Array.Find(probePaths, File.Exists)
-                        ?? throw new FileNotFoundException("DirectXTexNetImpl.dll could not be located.");
+                    if (!File.Exists(filePath))
+                        throw new FileNotFoundException("DirectXTexNetImpl.dll could not be located.", filePath);
 
-                    instance = loadInstanceFrom(foundFilePath);
-                }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void LoadInstanceFrom(string filePath)
-        {
-            lock (lockObject)
-            {
-                if (instance == null)
-                {
                     instance = loadInstanceFrom(filePath);
                 }
             }
