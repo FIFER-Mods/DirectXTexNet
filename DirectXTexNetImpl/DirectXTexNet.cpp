@@ -95,6 +95,20 @@ namespace DirectXTexNet
 	{
 		return (DirectX::ComputeScanlines(static_cast<::DXGI_FORMAT>(fmt), height));
 	}
+	bool TexHelperImpl::CalculateMipLevels(Size_t width, Size_t height, Size_t% mipLevels)
+	{
+		size_t _mipLevels = mipLevels;
+		bool result = DirectX::CalculateMipLevels(width, height, _mipLevels);
+		mipLevels = static_cast<Size_t>(_mipLevels);
+		return result;
+	}
+	bool TexHelperImpl::CalculateMipLevels3D(Size_t width, Size_t height, Size_t depth, Size_t% mipLevels)
+	{
+		size_t _mipLevels = mipLevels;
+		bool result = DirectX::CalculateMipLevels3D(width, height, depth, _mipLevels);
+		mipLevels = static_cast<Size_t>(_mipLevels);
+		return result;
+	}
 	Size_t TexHelperImpl::ComputeImageIndex(TexMetadata^ metadata, Size_t mip, Size_t item, Size_t slice)
 	{
 		DirectX::TexMetadata native;

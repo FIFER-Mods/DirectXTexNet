@@ -1343,6 +1343,10 @@ namespace DirectXTexNet
 
         public abstract Size_T ComputeScanlines(DXGI_FORMAT fmt, Size_t height);
 
+        public abstract bool CalculateMipLevels(Size_t width, Size_t height, ref Size_t mipLevels);
+
+        public abstract bool CalculateMipLevels3D(Size_t width, Size_t height, Size_t depth, ref Size_t mipLevels);
+
         /// <summary>
         /// Computes the image index for the specified values. If the image index is out of range <see cref="TexHelper.IndexOutOfRange" /> is returned.
         /// The ScratchImage provide a ComputeImageIndex method as well, which should be used preferrably.

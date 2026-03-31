@@ -552,6 +552,10 @@ namespace DirectXTexNet
 
 		Size_T ComputeScanlines(DXGI_FORMAT fmt, Size_t height) override;
 
+		bool CalculateMipLevels(Size_t width, Size_t height, Size_t% mipLevels) override;
+
+		bool CalculateMipLevels3D(Size_t width, Size_t height, Size_t depth, Size_t% mipLevels) override;
+
 		Size_t ComputeImageIndex(TexMetadata^ metadata, Size_t mip, Size_t item, Size_t slice) override;
 
 		DXGI_FORMAT MakeSRGB(DXGI_FORMAT fmt) override;
