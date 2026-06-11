@@ -24,7 +24,7 @@
     <Keyword>NetCoreCProj</Keyword>
     <RootNamespace>DirectXTexnet</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net11.0-windows</TargetFramework>
     <OutputPath>..\bin\$(Configuration)\$(TargetFramework)\</OutputPath>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
